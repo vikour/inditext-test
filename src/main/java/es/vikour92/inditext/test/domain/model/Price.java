@@ -4,12 +4,32 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+/**
+ * <p>
+ *     A <code>Price</code> is the amount of money that costs a product in a specific date interval.
+ * </p>
+ * <p>
+ *     A <code>Product</code> can have multiple prices in a date interval. In order to decide which price takes precedence its used
+ *     the field <code>priority</code>.
+ * </p>
+ */
+
 public class Price {
+
+    /** Price ID **/
     private final long id;
+
+    /** Amount of money that product costs. Must be positive or zero */
     private final BigDecimal amount;
+
+    /** Currency's price. By default, "EUR" **/
     private final String currency;
+    /** A <code>long</code> that defines the price's precedence when multiple prices intersect by date interval */
     private final long priority;
+    /** The date interval in which price its available */
     private final DateInterval dateInterval;
+
+    /** A product which affects this price */
     private final Product product;
 
     public static Builder builder() {
