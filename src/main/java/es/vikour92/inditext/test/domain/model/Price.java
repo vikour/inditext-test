@@ -108,6 +108,16 @@ public class Price {
         return Objects.hash(id, amount, currency, priority, dateInterval, product);
     }
 
+    @Override
+    public String toString() {
+        return String.format("Price(product='%s', amount='%s', currency='%s', priority='%s')",
+                product.name(), amount, currency, priority);
+    }
+
+    public static int compareByPriority(Price a, Price b) {
+        return Long.compare(a.priority, b.priority);
+    }
+
     public static class Builder {
         private Long id;
         private BigDecimal amount;
@@ -156,4 +166,5 @@ public class Price {
             return new Price(id, amount, currency, priority, startDate, endDate, product);
         }
     }
+
 }
