@@ -9,6 +9,7 @@ import es.vikour92.inditext.test.domain.ports.PricePersistencePort;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -88,6 +89,35 @@ class PriceServiceTest {
         verify(pricePersistencePort).find(eq(tp.brandId()), eq(tp.productId()), eq(tp.dateInterval));
     }
 
+    @Test
+    public void testFind_whenJustOnePrice_thenOk() {
+        TestParam tp = TestParam.newDefault();
+
+        Price dbPrice = Price.builder()
+                .id(1L)
+                .amount(BigDecimal.valueOf(10L))
+                .priority(5L)
+                .startDate(tp.dateInterval.start())
+                .endDate(tp.dateInterval.end())
+                .product(tp.product)
+                .build();
+
+        List<Price> pricesInBD = List.of(dbPrice);
+
+        // mocks
+        when(pricePersistencePort.find(eq(tp.brandId()), eq(tp.productId()), eq(tp.dateInterval)))
+                .thenReturn(pricesInBD);
+
+        // test
+        Optional<Price> mayAPrice = priceService.find(tp.brandId(), tp.productId(), tp.dateInterval);
+
+        // checks
+        assertTrue(mayAPrice.isPresent());
+        Price priceReturned = mayAPrice.get();
+        assertEquals(dbPrice, priceReturned);
+
+        verify(pricePersistencePort).find(eq(tp.brandId()), eq(tp.productId()), eq(tp.dateInterval));
+    }
 
     private DomainEntityNotFoundException buildException(Class<?> entityClass, long id) {
         return new DomainEntityNotFoundException(entityClass, id);
