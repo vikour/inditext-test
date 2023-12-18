@@ -8,6 +8,9 @@ import es.vikour92.inditext.test.domain.model.Product;
 import es.vikour92.inditext.test.domain.ports.PricePersistencePort;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -117,6 +120,42 @@ class PriceServiceTest {
         assertEquals(dbPrice, priceReturned);
 
         verify(pricePersistencePort).find(eq(tp.brandId()), eq(tp.productId()), eq(tp.dateInterval));
+    }
+
+    @Test
+    public void testFind_whenMultiplePricesInInterval_thenCorrect() {
+        TestParam tp = TestParam.newDefault();
+        Price.Builder priceBuilder = Price.builder()
+                .startDate(tp.dateInterval.start())
+                .endDate(tp.dateInterval.end())
+                .product(tp.product);
+
+        Price priceA = priceBuilder
+                .id(1L).priority(5L)
+                .amount(BigDecimal.ONE)
+                .build();
+        Price priceB = priceBuilder
+                .id(1L).priority(3L)
+                .amount(BigDecimal.TEN)
+                .build();
+        Price priceC = priceBuilder
+                .id(1L).priority(8L)
+                .amount(BigDecimal.valueOf(1024))
+                .build();
+        List<Price> pricesInBD = List.of(priceA, priceB, priceC);
+
+        // Mocks
+        when(pricePersistencePort.find(eq(tp.brandId()), eq(tp.productId()), eq(tp.dateInterval)))
+                .thenReturn(pricesInBD);
+
+        // test
+        Optional<Price> mayATopPrice = priceService.find(tp.brandId(), tp.productId(), tp.dateInterval);
+
+        // checks
+        assertNotNull(mayATopPrice);
+        assertTrue(mayATopPrice.isPresent());
+        Price topPrice = mayATopPrice.get();
+        assertEquals(priceC, topPrice);
     }
 
     private DomainEntityNotFoundException buildException(Class<?> entityClass, long id) {
