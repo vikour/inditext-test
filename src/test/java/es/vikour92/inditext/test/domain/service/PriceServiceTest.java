@@ -35,69 +35,85 @@ class PriceServiceTest {
 
     @Test
     public void testFind_whenBrandIdNotFound_thenError() {
-        long brandId = 1L;
-        long productId = 1L;
-        DomainEntityNotFoundException expectedException = buildException(Brand.class, brandId);
+        TestParam tp = TestParam.newDefault();
+        DomainEntityNotFoundException expectedException = buildException(Brand.class, tp.brandId());
 
         // mocks
-        when(pricePersistencePort.find(eq(brandId), eq(productId), any()))
+        when(pricePersistencePort.find(eq(tp.brandId()), eq(tp.productId()), eq(tp.dateInterval)))
                 .thenThrow(expectedException);
 
         // test
         DomainEntityNotFoundException exThrown = assertThrows(DomainEntityNotFoundException.class, () -> {
-            priceService.find(brandId, productId, DateInterval.of(LocalDateTime.now(), LocalDateTime.now().plusDays(1)));
+            priceService.find(tp.brandId(), tp.productId(), tp.dateInterval);
         });
 
         // checks
         assertEquals(expectedException, exThrown);
-        verify(pricePersistencePort).find(eq(brandId), eq(productId), any());
+        verify(pricePersistencePort).find(eq(tp.brandId()), eq(tp.productId()), eq(tp.dateInterval));
     }
 
     @Test
     public void testFind_whenProductIdNotFound_thenError() {
-        long brandId = 1L;
-        long productId = 1L;
-        DomainEntityNotFoundException expectedException = buildException(Product.class, productId);
+        TestParam tp = TestParam.newDefault();
+        DomainEntityNotFoundException expectedException = buildException(Product.class, tp.productId());
 
         // mocks
-        when(pricePersistencePort.find(eq(brandId), eq(productId), any()))
+        when(pricePersistencePort.find(eq(tp.brandId()), eq(tp.productId()), eq(tp.dateInterval)))
                 .thenThrow(expectedException);
 
         // test
         DomainEntityNotFoundException exThrown = assertThrows(DomainEntityNotFoundException.class, () -> {
-            priceService.find(brandId, productId, DateInterval.of(LocalDateTime.now(), LocalDateTime.now().plusDays(1)));
+            priceService.find(tp.brandId(), tp.productId(), tp.dateInterval);
         });
 
         // checks
         assertEquals(expectedException, exThrown);
-        verify(pricePersistencePort).find(eq(brandId), eq(productId), any());
+        verify(pricePersistencePort).find(eq(tp.brandId()), eq(tp.productId()), eq(tp.dateInterval));
     }
 
     @Test
     public void testFind_whenNoPrices_thenEmpty() {
-        long brandId = 1L;
-        long productId = 1L;
-        LocalDateTime startDate = LocalDateTime.now();
-        LocalDateTime endDate = startDate.plusDays(1);
-        DateInterval dateInterval = new DateInterval(startDate, endDate);
-
-        List<Price> priceList = new ArrayList<>();
+        TestParam tp = TestParam.newDefault();
+        List<Price> expectedPriceList = new ArrayList<>();
 
         // mocks
-        when(pricePersistencePort.find(eq(brandId), eq(productId), eq(dateInterval)))
-                .thenReturn(priceList);
+        when(pricePersistencePort.find(eq(tp.brandId()), eq(tp.productId()), eq(tp.dateInterval)))
+                .thenReturn(expectedPriceList);
 
         // test
-        Optional<Price> mayAPrice = priceService.find(brandId, productId, dateInterval);
+        Optional<Price> mayAPrice = priceService.find(tp.brandId(), tp.productId(), tp.dateInterval);
 
         // checks
         assertTrue(mayAPrice.isEmpty());
-        verify(pricePersistencePort).find(eq(brandId), eq(productId), eq(dateInterval));
+        verify(pricePersistencePort).find(eq(tp.brandId()), eq(tp.productId()), eq(tp.dateInterval));
     }
 
 
     private DomainEntityNotFoundException buildException(Class<?> entityClass, long id) {
         return new DomainEntityNotFoundException(entityClass, id);
+    }
+
+    private record TestParam (Product product, DateInterval dateInterval) {
+
+        Brand brand() {
+            return product.brand();
+        }
+
+        long brandId() {
+            return product.brand().id();
+        }
+
+        long productId() {
+            return product.id();
+        }
+
+        static TestParam newDefault() {
+            Brand brand = new Brand(1L, "brand-name");
+            Product product = new Product(2L, "productName", brand);
+            LocalDateTime now = LocalDateTime.now();
+            LocalDateTime nextDay = now.plusDays(1);
+            return new TestParam(product, DateInterval.of(now, nextDay));
+        }
     }
 
 
