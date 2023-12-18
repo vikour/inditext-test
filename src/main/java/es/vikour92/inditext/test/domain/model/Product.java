@@ -1,15 +1,16 @@
 package es.vikour92.inditext.test.domain.model;
 
-import jakarta.persistence.Id;
-import jakarta.validation.constraints.NotEmpty;
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import java.util.Objects;
 
-@Data
-@AllArgsConstructor
-public class Product {
-    @Id
-    private long id;
-    @NotEmpty
-    private String name;
+public record Product(long id, String name, Brand brand) {
+
+    public Product(long id, String name, Brand brand) {
+        this.id = id;
+        this.name = Objects.requireNonNull(name, "Product's name cannot be null");
+        this.brand = Objects.requireNonNull(brand, "Product's brand cannot be null");
+
+        if (this.name.isEmpty()) {
+            throw new IllegalArgumentException("Product's name cannot be empty");
+        }
+    }
 }
