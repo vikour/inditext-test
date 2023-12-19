@@ -168,6 +168,49 @@ class PriceTest {
         assertEquals(expectedRepresentation, price.toString());
     }
 
+    @ParameterizedTest
+    @ValueSource(longs = {-2, -33, 5, 4, 90})
+    public void testComparePriority_whenHigher_thenCorrect(long priorityB) {
+        Price.Builder priceBuilder = genDefaultBuilder();
+        priceBuilder.priority(91); // Fixed priority
+        Price priceA = priceBuilder.build();
+
+        priceBuilder.priority(priorityB);
+        Price priceB = priceBuilder.build();
+
+        assertTrue(Price.compareByPriority(priceA, priceB) > 0);
+        assertFalse(Price.compareByPriority(priceB, priceA) > 0);
+    }
+
+
+    @ParameterizedTest
+    @ValueSource(longs = {-2, -33, 5, 4, 90})
+    public void testComparePriority_whenLower_thenCorrect(long priorityB) {
+        Price.Builder priceBuilder = genDefaultBuilder();
+        priceBuilder.priority(-34); // Fixed priority
+        Price priceA = priceBuilder.build();
+
+        priceBuilder.priority(priorityB);
+        Price priceB = priceBuilder.build();
+
+        assertTrue(Price.compareByPriority(priceA, priceB) < 0);
+        assertFalse(Price.compareByPriority(priceB, priceA) < 0);
+    }
+
+    @Test
+    public void testComparePriority_whenEquals_thenCorrect() {
+        Price.Builder priceBuilder = genDefaultBuilder();
+        Price priceA = priceBuilder.build();
+        Price priceB = priceBuilder.build();
+
+        // Symmetry
+        assertEquals(0, Price.compareByPriority(priceA, priceB));
+        assertEquals(0, Price.compareByPriority(priceB, priceA));
+
+        // Reflexion
+        assertEquals(0, Price.compareByPriority(priceA, priceA));
+    }
+
     private Price.Builder genDefaultBuilder() {
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime aHourLater = now.plus(Duration.of(1, ChronoUnit.DAYS));
