@@ -6,8 +6,5 @@ public abstract class PersistenceException extends RuntimeException {
         super(message, cause);
     }
 
-    public PersistenceException(String message) {
-            super(message);
-    }
 }
 

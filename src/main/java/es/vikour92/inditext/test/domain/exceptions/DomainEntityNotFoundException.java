@@ -9,18 +9,8 @@ public class DomainEntityNotFoundException extends PersistenceException {
         this.domainClass = domainClass;
         this.id = id;
     }
-    public DomainEntityNotFoundException(Class<?> domainClass, Object id, Throwable cause) {
-        this(String.format(DEFAULT_MSG, domainClass.getName(), id), domainClass, id, cause);
-    }
+
     public DomainEntityNotFoundException(Class<?> domainClass, Object id) {
         this(String.format(DEFAULT_MSG, domainClass.getName(), id), domainClass, id, null);
-    }
-
-    public Class<?> getDomainClass() {
-        return domainClass;
-    }
-
-    public Object getId() {
-        return id;
     }
 }
