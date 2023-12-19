@@ -3,6 +3,7 @@ package es.vikour92.inditext.test.domain.model;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
+import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -17,11 +18,17 @@ class BrandTest {
         assertDoesNotThrow(BrandTest::generateDefaultBrand);
     }
 
-    @ParameterizedTest
-    @NullAndEmptySource
-    public void testCreateBrand_whenInvalidName_thenKo(String name) {
-        assertThrows(RuntimeException.class, () -> {
-            new Brand(1L, name);
+    @Test
+    public void testCreateBrand_whenNullName_thenKo() {
+        assertThrows(NullPointerException.class, () -> {
+            new Brand(1L, null);
+        });
+    }
+
+    @Test
+    public void testCreateBrand_whenEmptyName_thenKo() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            new Brand(1L, "");
         });
     }
 
