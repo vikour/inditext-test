@@ -114,6 +114,15 @@ public class Price {
                 product.name(), amount, currency, priority);
     }
 
+    /**
+     * Defines which Price has higher priority than others.
+     *
+     * @param a A Price
+     * @param b A Second Price to compare with previous
+     *
+     * @return 0 if equals, negative value if <code>a</code> is less than <code>b</code>, otherwise a positive number
+     */
+
     public static int compareByPriority(Price a, Price b) {
         return Long.compare(a.priority, b.priority);
     }
