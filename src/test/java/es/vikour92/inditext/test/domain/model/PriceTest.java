@@ -160,6 +160,14 @@ class PriceTest {
         assertNotEquals(a.hashCode(), c.hashCode());
     }
 
+    @Test
+    public void testToString_thenCorrect() {
+        Price price = genDefaultBuilder()
+                .build();
+        String expectedRepresentation = "Price(product='product_name', amount='1', currency='EUR', priority='1')";
+        assertEquals(expectedRepresentation, price.toString());
+    }
+
     private Price.Builder genDefaultBuilder() {
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime aHourLater = now.plus(Duration.of(1, ChronoUnit.DAYS));
