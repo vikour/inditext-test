@@ -17,7 +17,7 @@ public class PriceServiceImpl implements PriceService {
     }
 
     @Override
-    public Optional<Price> find(long brandId, long productId, LocalDateTime dateTime) {
+    public Optional<Price> findPVP(long brandId, long productId, LocalDateTime dateTime) {
         Iterable<Price> prices = pricePersistencePort.find(brandId, productId, dateTime);
         return StreamSupport.stream(prices.spliterator(), false)
                 .max(Price::compareByPriority);

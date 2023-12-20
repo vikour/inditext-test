@@ -46,7 +46,7 @@ class PriceServiceTest {
 
         // test
         DomainEntityNotFoundException exThrown = assertThrows(DomainEntityNotFoundException.class, () -> {
-            priceService.find(tp.brandId(), tp.productId(), tp.dateTimeInRange());
+            priceService.findPVP(tp.brandId(), tp.productId(), tp.dateTimeInRange());
         });
 
         // checks
@@ -65,7 +65,7 @@ class PriceServiceTest {
 
         // test
         DomainEntityNotFoundException exThrown = assertThrows(DomainEntityNotFoundException.class, () -> {
-            priceService.find(tp.brandId(), tp.productId(), tp.dateTimeInRange());
+            priceService.findPVP(tp.brandId(), tp.productId(), tp.dateTimeInRange());
         });
 
         // checks
@@ -83,7 +83,7 @@ class PriceServiceTest {
                 .thenReturn(expectedPriceList);
 
         // test
-        Optional<Price> mayAPrice = priceService.find(tp.brandId(), tp.productId(), tp.dateTimeInRange());
+        Optional<Price> mayAPrice = priceService.findPVP(tp.brandId(), tp.productId(), tp.dateTimeInRange());
 
         // checks
         assertTrue(mayAPrice.isEmpty());
@@ -110,7 +110,7 @@ class PriceServiceTest {
                 .thenReturn(pricesInBD);
 
         // test
-        Optional<Price> mayAPrice = priceService.find(tp.brandId(), tp.productId(), tp.dateTimeInRange());
+        Optional<Price> mayAPrice = priceService.findPVP(tp.brandId(), tp.productId(), tp.dateTimeInRange());
 
         // checks
         assertTrue(mayAPrice.isPresent());
@@ -147,7 +147,7 @@ class PriceServiceTest {
                 .thenReturn(pricesInBD);
 
         // test
-        Optional<Price> mayATopPrice = priceService.find(tp.brandId(), tp.productId(), tp.dateTimeInRange());
+        Optional<Price> mayATopPrice = priceService.findPVP(tp.brandId(), tp.productId(), tp.dateTimeInRange());
 
         // checks
         assertNotNull(mayATopPrice);
@@ -185,7 +185,7 @@ class PriceServiceTest {
                 .thenReturn(pricesInBD);
 
         // test
-        Optional<Price> mayATopPrice = priceService.find(tp.brandId(), tp.productId(), tp.dateTimeInRange());
+        Optional<Price> mayATopPrice = priceService.findPVP(tp.brandId(), tp.productId(), tp.dateTimeInRange());
 
         // checks
         assertNotNull(mayATopPrice);
