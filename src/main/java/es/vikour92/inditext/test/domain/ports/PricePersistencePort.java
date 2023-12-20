@@ -10,12 +10,13 @@ import java.util.Collection;
 public interface PricePersistencePort {
 
     /**
-     * Returns
-     * @param brandId
-     * @param productId
-     * @param dateTime
+     * Fetch in the data source a bunch of prices of a Brand and Product in a specific date time.
      *
-     * @return An iterable product's prices in the date interval
+     * @param brandId    A <code>Long</code> as brand identifier
+     * @param productId  A <code>Long</code> as product identifier
+     * @param dateTime   A dateTime in which product price is queried
+     *
+     * @return A product's prices collection in the date interval
      *
      * @throws DomainEntityNotFoundException If brandId or ProductId could not be found.
      */
