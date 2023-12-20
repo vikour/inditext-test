@@ -41,17 +41,17 @@ class PriceServiceTest {
         DomainEntityNotFoundException expectedException = buildException(Brand.class, tp.brandId());
 
         // mocks
-        when(pricePersistencePort.find(eq(tp.brandId()), eq(tp.productId()), eq(tp.dateInterval)))
+        when(pricePersistencePort.find(eq(tp.brandId()), eq(tp.productId()), eq(tp.dateTimeInRange())))
                 .thenThrow(expectedException);
 
         // test
         DomainEntityNotFoundException exThrown = assertThrows(DomainEntityNotFoundException.class, () -> {
-            priceService.find(tp.brandId(), tp.productId(), tp.dateInterval);
+            priceService.find(tp.brandId(), tp.productId(), tp.dateTimeInRange());
         });
 
         // checks
         assertEquals(expectedException, exThrown);
-        verify(pricePersistencePort).find(eq(tp.brandId()), eq(tp.productId()), eq(tp.dateInterval));
+        verify(pricePersistencePort).find(eq(tp.brandId()), eq(tp.productId()), eq(tp.dateTimeInRange()));
     }
 
     @Test
@@ -60,17 +60,17 @@ class PriceServiceTest {
         DomainEntityNotFoundException expectedException = buildException(Product.class, tp.productId());
 
         // mocks
-        when(pricePersistencePort.find(eq(tp.brandId()), eq(tp.productId()), eq(tp.dateInterval)))
+        when(pricePersistencePort.find(eq(tp.brandId()), eq(tp.productId()), eq(tp.dateTimeInRange())))
                 .thenThrow(expectedException);
 
         // test
         DomainEntityNotFoundException exThrown = assertThrows(DomainEntityNotFoundException.class, () -> {
-            priceService.find(tp.brandId(), tp.productId(), tp.dateInterval);
+            priceService.find(tp.brandId(), tp.productId(), tp.dateTimeInRange());
         });
 
         // checks
         assertEquals(expectedException, exThrown);
-        verify(pricePersistencePort).find(eq(tp.brandId()), eq(tp.productId()), eq(tp.dateInterval));
+        verify(pricePersistencePort).find(eq(tp.brandId()), eq(tp.productId()), eq(tp.dateTimeInRange()));
     }
 
     @Test
@@ -79,15 +79,15 @@ class PriceServiceTest {
         List<Price> expectedPriceList = new ArrayList<>();
 
         // mocks
-        when(pricePersistencePort.find(eq(tp.brandId()), eq(tp.productId()), eq(tp.dateInterval)))
+        when(pricePersistencePort.find(eq(tp.brandId()), eq(tp.productId()), eq(tp.dateTimeInRange())))
                 .thenReturn(expectedPriceList);
 
         // test
-        Optional<Price> mayAPrice = priceService.find(tp.brandId(), tp.productId(), tp.dateInterval);
+        Optional<Price> mayAPrice = priceService.find(tp.brandId(), tp.productId(), tp.dateTimeInRange());
 
         // checks
         assertTrue(mayAPrice.isEmpty());
-        verify(pricePersistencePort).find(eq(tp.brandId()), eq(tp.productId()), eq(tp.dateInterval));
+        verify(pricePersistencePort).find(eq(tp.brandId()), eq(tp.productId()), eq(tp.dateTimeInRange()));
     }
 
     @Test
@@ -106,18 +106,18 @@ class PriceServiceTest {
         List<Price> pricesInBD = List.of(dbPrice);
 
         // mocks
-        when(pricePersistencePort.find(eq(tp.brandId()), eq(tp.productId()), eq(tp.dateInterval)))
+        when(pricePersistencePort.find(eq(tp.brandId()), eq(tp.productId()), eq(tp.dateTimeInRange())))
                 .thenReturn(pricesInBD);
 
         // test
-        Optional<Price> mayAPrice = priceService.find(tp.brandId(), tp.productId(), tp.dateInterval);
+        Optional<Price> mayAPrice = priceService.find(tp.brandId(), tp.productId(), tp.dateTimeInRange());
 
         // checks
         assertTrue(mayAPrice.isPresent());
         Price priceReturned = mayAPrice.get();
         assertEquals(dbPrice, priceReturned);
 
-        verify(pricePersistencePort).find(eq(tp.brandId()), eq(tp.productId()), eq(tp.dateInterval));
+        verify(pricePersistencePort).find(eq(tp.brandId()), eq(tp.productId()), eq(tp.dateTimeInRange()));
     }
 
     @Test
@@ -143,11 +143,11 @@ class PriceServiceTest {
         List<Price> pricesInBD = List.of(priceA, priceB, priceC);
 
         // Mocks
-        when(pricePersistencePort.find(eq(tp.brandId()), eq(tp.productId()), eq(tp.dateInterval)))
+        when(pricePersistencePort.find(eq(tp.brandId()), eq(tp.productId()), eq(tp.dateTimeInRange())))
                 .thenReturn(pricesInBD);
 
         // test
-        Optional<Price> mayATopPrice = priceService.find(tp.brandId(), tp.productId(), tp.dateInterval);
+        Optional<Price> mayATopPrice = priceService.find(tp.brandId(), tp.productId(), tp.dateTimeInRange());
 
         // checks
         assertNotNull(mayATopPrice);
@@ -181,11 +181,11 @@ class PriceServiceTest {
         List<Price> pricesInBD = List.of(priceA, priceB, priceC);
 
         // Mocks
-        when(pricePersistencePort.find(eq(tp.brandId()), eq(tp.productId()), eq(tp.dateInterval)))
+        when(pricePersistencePort.find(eq(tp.brandId()), eq(tp.productId()), eq(tp.dateTimeInRange())))
                 .thenReturn(pricesInBD);
 
         // test
-        Optional<Price> mayATopPrice = priceService.find(tp.brandId(), tp.productId(), tp.dateInterval);
+        Optional<Price> mayATopPrice = priceService.find(tp.brandId(), tp.productId(), tp.dateTimeInRange());
 
         // checks
         assertNotNull(mayATopPrice);
@@ -212,6 +212,10 @@ class PriceServiceTest {
 
         long productId() {
             return product.id();
+        }
+
+        LocalDateTime dateTimeInRange() {
+            return dateInterval.start().plusNanos(1);
         }
 
         static TestParam newDefault() {

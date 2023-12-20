@@ -4,6 +4,7 @@ import es.vikour92.inditext.test.domain.model.DateInterval;
 import es.vikour92.inditext.test.domain.model.Price;
 import es.vikour92.inditext.test.domain.ports.PricePersistencePort;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.stream.StreamSupport;
 
@@ -16,8 +17,8 @@ public class PriceServiceImpl implements PriceService {
     }
 
     @Override
-    public Optional<Price> find(long brandId, long productId, DateInterval dateInterval) {
-        Iterable<Price> prices = pricePersistencePort.find(brandId, productId, dateInterval);
+    public Optional<Price> find(long brandId, long productId, LocalDateTime dateTime) {
+        Iterable<Price> prices = pricePersistencePort.find(brandId, productId, dateTime);
         return StreamSupport.stream(prices.spliterator(), false)
                 .max(Price::compareByPriority);
     }
