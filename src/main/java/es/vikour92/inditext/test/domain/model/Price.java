@@ -97,7 +97,7 @@ public class Price {
         Price price = (Price) o;
         return priority == price.priority &&
                 Objects.equals(id, price.id) &&
-                Objects.equals(amount, price.amount) &&
+                amount.compareTo(price.amount) == 0 &&
                 Objects.equals(currency, price.currency) &&
                 Objects.equals(dateInterval, price.dateInterval) &&
                 Objects.equals(product, price.product);

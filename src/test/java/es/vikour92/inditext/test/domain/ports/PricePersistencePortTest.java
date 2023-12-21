@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * Contains all test cases required for those PricePersistencePort's implementations
  */
-abstract class PricePersistencePortTest {
+public abstract class PricePersistencePortTest {
 
     protected PricePersistencePort persistencePort;
 
@@ -27,7 +27,7 @@ abstract class PricePersistencePortTest {
      * @return An implementation of PricePersistencePort
      */
 
-    abstract PricePersistencePort createPersistencePort();
+    protected abstract PricePersistencePort createPersistencePort();
 
     /**
      * Stores a prices in data source
@@ -35,7 +35,7 @@ abstract class PricePersistencePortTest {
      * @param prices One or multiple Prices
      */
 
-    abstract void persist(Price... prices);
+    protected abstract void persist(Price... prices);
 
     /**
      * Stores a product in data source
@@ -43,7 +43,7 @@ abstract class PricePersistencePortTest {
      * @param product A Product
      */
 
-    abstract void persist(Product product);
+    protected abstract void persist(Product product);
 
     /**
      * Stores brand in data source
@@ -51,13 +51,13 @@ abstract class PricePersistencePortTest {
      * @param brand A Brand
      */
 
-    abstract void persist(Brand brand);
+    protected abstract void persist(Brand brand);
 
     /**
      * Cleans all prices, products and brands in data source
      */
 
-    abstract void cleanPersistence();
+    protected abstract void cleanPersistence();
 
     @BeforeEach
     public void cleanUpTest() {

@@ -12,29 +12,29 @@ class MemoryPersistencePortTest extends PricePersistencePortTest {
     }
 
     @Override
-    PricePersistencePort createPersistencePort() {
+    protected PricePersistencePort createPersistencePort() {
         return new MemoryPersistencePort();
     }
 
     @Override
-    void persist(Price... prices) {
+    protected void persist(Price... prices) {
         for (Price p : prices) {
             getMemoryPersistence().persist(p);
         }
     }
 
     @Override
-    void persist(Product product) {
+    protected void persist(Product product) {
         getMemoryPersistence().persist(product);
     }
 
     @Override
-    void persist(Brand brand) {
+    protected void persist(Brand brand) {
         getMemoryPersistence().persist(brand);
     }
 
     @Override
-    void cleanPersistence() {
+    protected void cleanPersistence() {
         getMemoryPersistence().cleanUp();
     }
 }
